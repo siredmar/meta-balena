@@ -28,6 +28,9 @@ export DOCKER_HOST="unix:///var/run/balena-host.sock"
 SYSROOT="/mnt/sysroot/inactive"
 
 if [ -d /mnt/state ]; then
+	# We are running on device and not during build
+	# Mount the inactive partition.
+	systemctl start mnt-sysroot-inactive.service
 	# Save VPN state for rollbacks
 	if [ -e /var/run/openvpn/vpn_status/active ]; then
 		echo "BALENAOS_ROLLBACK_VPNONLINE=1" > /mnt/state/rollback-health-variables ;
