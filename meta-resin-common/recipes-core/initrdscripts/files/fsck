@@ -1,6 +1,13 @@
 #!/bin/sh
 
 fsck_enabled() {
+    # We would like the output of stdout/stderr in kernel messages to
+    # read them from userspace for debugging purposes. This makes the
+    # debug shell in initramfs a bit awkward to work with. But is the
+    # simplest way to grab output of all commands running in initramfs
+    # in a place where userspace can read them afterwards
+    exec >/dev/kmsg 2>&1
+
     # On flasher we don't run fsck
     if [ -h /dev/disk/by-label/flash-boot ]; then
         echo "[INFO] Flasher detected. We don't run fsck on the partitions when provisioning."
