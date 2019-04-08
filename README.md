@@ -169,6 +169,38 @@ See below an example of a config.json snippet which disables MAC address randomi
 }
 ```
 
+##### connectivity
+
+This object defines configuration related to connectivity section in NetworkManager:
+   * "uri" string where the value is the url to query for connectivity checks
+   * "interval" string where the value is the interval between connectivity checks in seconds.
+
+Check Network Manager docs for more information. These map exactly in a NetworkManager config fragment
+
+The default values are
+```
+uri=$API_ENDPOINT/connectivity-check
+interval=3600
+```
+
+See below an example of a config.json snippet which configures the connectivity check by passing the balena cloud connectivity endpoint with a 5 minute interval. 
+```
+"os": {
+  "network" : {
+    "wifi": {
+      "randomMacAddressScan": false
+    },
+    "connectivity": {
+        "uri" : "https://api.balena-cloud.com/connectivity-check",
+        "interval" : 300
+      }
+  }
+}
+```
+
+To conserve data usage, the default type of connectivity check is where the response is only a blank 204
+
+
 #### udevRules
 
 String. Custom udev rules can be passed via config.json.
