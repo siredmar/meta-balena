@@ -91,6 +91,30 @@ if [ "$config_json_value" != "null" ]; then
 	nm_config="$(printf "%s\nwifi.scan-rand-mac-address=%s" "$nm_config" "$value")"
 fi
 
+# [connectivity]
+section="connectivity"
+s=0
+config_json_uri="$(jq -r " .os.network.connectivity.uri" "$CONFIG_PATH")"
+if [ "$config_json_uri" = "null" ] ; then
+    config_json_uri="$API_ENDPOINT/connectivity-check"
+    log "info" "Using default os.network.connectivity.uri configuration : $config_json_uri"
+else
+    log "info" "Found os.network.connectivity.uri configuration : $config_json_uri"
+fi
+
+config_json_interval="$(jq -r " .os.network.connectivity.interval" "$CONFIG_PATH")"
+if [ "$config_json_interval" = null ] ; then
+    config_json_interval=3600
+    log "info" "Using default os.network.connectivity.interval : $config_json_interval"
+else
+    log "info" "Found os.network.connectivity.interval : $config_json_interval"
+fi
+
+nm_config="$(printf "%s\n[%s]" "$nm_config" "$section")"
+nm_config="$(printf "%s\nuri=%s" "$nm_config" "$config_json_uri")"
+nm_config="$(printf "%s\ninterval=%s" "$nm_config" "$config_json_interval")"
+nm_config="$(printf "%s\nrequest=" "$nm_config")"
+
 # Write final NM configuation fragment
 if [ ! -f "$nm_conf_fragment" ] || [ "$(cat \
 	"$nm_conf_fragment")" != "$nm_config" ]; then

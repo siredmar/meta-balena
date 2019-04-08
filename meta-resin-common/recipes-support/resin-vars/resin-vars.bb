@@ -96,14 +96,30 @@ do_runtests() {
 	bbnote "Running os-networkmanager tests..."
 	runtest os-networkmanager.testconfig1.json 0 '# This file is generated based on os.networkManager configuration in config.json.
 [device]
-wifi.scan-rand-mac-address=yes'
+wifi.scan-rand-mac-address=yes
+[connectivity]
+uri=/connectivity-check
+interval=3600
+request='
 	runtest os-networkmanager.testconfig2.json 0 '# This file is generated based on os.networkManager configuration in config.json.
 [device]
-wifi.scan-rand-mac-address=no'
-	runtest os-networkmanager.testconfig3.json 0 '# This file is generated based on os.networkManager configuration in config.json.'
+wifi.scan-rand-mac-address=no
+[connectivity]
+uri=/connectivity-check
+interval=3600
+request='
+	runtest os-networkmanager.testconfig3.json 0 '# This file is generated based on os.networkManager configuration in config.json.
+[connectivity]
+uri=/connectivity-check
+interval=3600
+request='
 	runtest os-networkmanager.testconfig4.json 0 '# This file is generated based on os.networkManager configuration in config.json.
 [device]
-wifi.scan-rand-mac-address=foo'
+wifi.scan-rand-mac-address=foo
+[connectivity]
+uri=/connectivity-check
+interval=3600
+request='
 	runtest os-networkmanager.testconfig5.json 1 'NO FILE'
 }
 addtask runtests before do_package after do_install
